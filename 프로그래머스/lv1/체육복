@@ -1,1 +1,39 @@
 
+def solution(n, lost, reserve):
+    
+    lost.sort()
+    reserve.sort()
+    
+    lost_arr = []
+    
+    for i in range(len(lost)):
+        for k in range(len(reserve)):
+            if(lost[i] == reserve[k]):
+                reserve.remove(reserve[k])
+                lost_arr.append(lost[i])
+                break
+    
+    for i in range(len(lost_arr)):
+        lost.remove(lost_arr[i])
+    
+    
+    answer = n - len(lost)
+    check = [False for _ in range(len(reserve))]
+    cnt = 0
+
+    
+    for i in range(len(lost)):
+        for k in range(len(reserve)):
+            if(lost[i] - 1 == reserve[k] and check[k] == False):
+                cnt += 1
+                check[k] = True
+                break
+            elif(lost[i] + 1 == reserve[k] and check[k] == False):
+                cnt += 1
+                check[k] = True
+                break
+    
+    print(cnt)
+    
+    
+    return answer + cnt

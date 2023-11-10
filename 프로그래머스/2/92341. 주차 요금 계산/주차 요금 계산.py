@@ -32,16 +32,15 @@ def solution(fees, records):
                     # print(f'in car == records {records[i].split()[1]}')
                     # print(k)
                   
-                    check = False
+                    
                     for j in range(len(Result_Car)):
                 
                         if(Result_Car[j][0] == records[i].split()[1]):
                             Result_Car[j][1] +=  time_func(records[i].split()[0]) - IN_car[k][0]
-                            check = True
+            
                             break
                     
-                    if(check == False):
-                        Result_Car.append([records[i].split()[1], time_func(records[i].split()[0]) - IN_car[k][0]])
+                    
                     del IN_car[k]
                     break
     

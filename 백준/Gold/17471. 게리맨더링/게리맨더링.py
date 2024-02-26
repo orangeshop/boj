@@ -1,78 +1,62 @@
+# 게리멘더링
+import sys
 from collections import deque
-from sys import stdin
-def bfs(ls):
-    Q = deque()
-    Q.append(ls[0])
-    graphVis = [False for _ in range(N+1)]
-    graphVis[ls[0]] = True
-    num = population[ls[0]-1]
-    cnt = 1
-    while(len(Q) != 0):
-        cur = Q.popleft()
-
-        for dir in range(len(adj[cur])):
-            if  adj[cur][dir] in ls and graphVis[adj[cur][dir]] == False:
-                num += population[adj[cur][dir]-1]
-                Q.append(adj[cur][dir])
-                cnt += 1
-                graphVis[adj[cur][dir]] = True
+MAX = sys.maxsize
+input = sys.stdin.readline
+N = int(input())
+person = [0] + list(map(int, input().split()))
+arr = [[] for _ in range(N+1)]
+for i in range(1, N+1):
+    temp = deque(map(int, input().split()))
+    temp.popleft()
+    arr[i] = list(temp)
 
 
+def bfs(area):
+    q = deque()
+    visited = [False] * (N+1)
+    q.append(area[0])
+    visited[area[0]] = True
+    temp = 0
+    count = 1
+    while q:
+        node = q.popleft()
+        temp += person[node]
+        for nnode in arr[node]:
+            if nnode in area and not visited[nnode]:
+                visited[nnode] = True
+                count += 1
+                q.append(nnode)
+    if count == len(area):
+        return temp
 
-    if cnt != len(ls):
-        return 9999999
-    return num
 
-
-def back(depth, n, vis):
-    global answer
-    if depth == n:
-        resultA = []
-        resultB = []
-
-        for i in range(1,N+1):
-            if vis[i] == False:
-                resultA.append(i)
+def choose(n, count):
+    global result
+    if count == n:
+        area1, area2 = [], []
+        for i in range(1, N+1):
+            if visited[i]:
+                area1.append(i)
             else:
-                resultB.append(i)
-
-        # print(resultA, resultB)
-        x, y = bfs(resultA), bfs(resultB)
-        # print(x, y)
-        if x != 9999999 and y != 9999999:
-            answer = min(answer, abs(x - y))
-
+                area2.append(i)
+        x, y = bfs(area1), bfs(area2)
+        if x and y:
+            result = min(result, abs(x-y))
         return
-
     for i in range(1, N+1):
-        if vis[i] == False:
-            vis[i] = True
-            back(depth+1, n, vis)
-            vis[i] = False
-
-global N
-N = int(stdin.readline())
+        if not visited[i]:
+            visited[i] = True
+            choose(n, count+1)
+            visited[i] = False
 
 
-global population
-population = list(map(int, stdin.readline().split()))
-global adj
-adj = [[] for _ in range(N+1)]
+result = MAX
+for i in range(1, N // 2 + 1):
+    visited = [False]*(N+1)
+    choose(i, 0)
 
-for i in range(1,N+1):
-    tmp = deque(map(int, stdin.readline().split()))
-
-    tmp.popleft()
-    adj[i] = list(tmp)
-
-
-global answer
-answer = 9999999
-
-for i in range(1, N//2+1):
-    vis = [False for _ in range(N+1)]
-    back(0, i, vis)
-
-if answer == 9999999:
-    answer = -1
-print(answer)
+if result == MAX:
+    print(-1)
+else:
+    print(result)

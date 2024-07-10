@@ -1,49 +1,32 @@
+//
+//  main.cpp
+//  cpp
+//
+//  Created by 최영호 on 7/8/24.
+//
+
 #include <iostream>
-#include <string>
-#include<cstring>
-#include <vector>
-#include <stack>
 #include <algorithm>
+#include <stack>
+#include <string>
+#include <sstream>
 #include <queue>
-#include <tuple>
-#include <math.h>
-#include <set>
-#include <map>
 using namespace std;
-//cin.tie(NULL);
-//ios::sync_with_stdio(false);
 
-
-int n;
-int dp[10000001];
-
+int N;
+int d[1000005];
 int main(){
-    cin >> n;
+    cin >> N;
     
+    fill(d, d +1000005, 9999);
+    d[0] = 0;
+    d[1] = 0;
     
-    memset(dp,10000,sizeof(int)*10000001);
-    dp[n] = 0;
-    for(int i=n; i>=1; i--)
-    {
-        
-        
-        if(i % 3 == 0)
-        {
-            dp[i/3] = min(dp[i]+1,dp[i/3]);
-            
-        }
-        
-        if(i % 2 == 0)
-        {
-            dp[i/2] = min(dp[i]+1,dp[i/2]);
-            
-        }
-        
-        dp[i-1] = min(dp[i]+1,dp[i-1]);
-        
-        
+    for(int i =1; i < 1000005; i++){
+        d[i] = min(d[i], d[i-1] + 1);
+        if(i % 3 == 0) d[i] = min(d[i], d[i/3] + 1);
+        if(i % 2 == 0) d[i] = min(d[i], d[i/2] + 1);
     }
-
-    cout << dp[1] << endl;
-
+    
+    cout << d[N];
 }

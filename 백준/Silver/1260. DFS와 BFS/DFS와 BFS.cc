@@ -1,100 +1,76 @@
+//
+//  main.cpp
+//  cpp
+//
+//  Created by 최영호 on 7/8/24.
+//
+
 #include <iostream>
-#include <string>
-#include <vector>
-#include <stack>
 #include <algorithm>
+#include <stack>
+#include <string>
+#include <sstream>
 #include <queue>
-#include <tuple>
+
 using namespace std;
+int N, M, V;
+vector<int> adj[1005];
+queue<int> Q;
+bool visB[1005];
+vector<int> Bans;
+void bfs(int c){
+    Q.push(c);
+    visB[c] = true;
+    while(!Q.empty()){
+        int cur = Q.front();
+        cout << cur << " ";
+        Q.pop();
+        
+        for(auto nxt : adj[cur]){
+            if(visB[nxt] == true) continue;
+            visB[nxt] = true;
+            Q.push(nxt);
+        }
+    }
+}
 
-
-vector<int> adj[10000];
-bool vis[10000];
-
+bool visD[1005];
+stack<int> S;
+vector<int> Dans;
 void dfs(int cur)
 {
-    vis[cur] = true;
+    visD[cur] = true;
     cout << cur << ' ';
     for(auto nxt : adj[cur]){
-        if(vis[nxt]) continue;
+        if(visD[nxt]) continue;
         dfs(nxt);
     }
 }
 
+int main(){
+    cin >> N >> M >> V;
+    
+    for(int i =0; i < M; i++){
+        int a = 0;
+        int b = 0;
+        
+        cin >> a >> b;
+        
+        adj[a].push_back(b);
+        adj[b].push_back(a);
+    }
+    
+    for(int i =0; i <= N; i++){
+        sort(adj[i].begin(), adj[i].end());
+    }
+     
+    
+    dfs(V);
 
-int main()
-{
+    cout << endl;
     
-    int a=0;
-    int b=0;
-    int c=0;
-    cin >> a>>b>> c;
-    
-    for(int i=0; i<b; i++)
-    {
-        int num_1 =0;
-        int num_2 =0;
-        
-        cin >> num_1 >>num_2;
-        
-        adj[num_1].push_back(num_2);
-        adj[num_2].push_back(num_1);
-    }
-    for(int i=0; i<b; i++)
-    {
-        sort(adj[i].begin() ,adj[i].end());
-    }
-    
-    
-    //dfs
-    
-    dfs(c);
-    
-    
-    /*stack<int> s;
-    s.push(c);
-    vis[c] =true;
-    
-    while(!s.empty())
-    {
-        int cur = s.top();
-        s.pop();
-        
-        if(vis[cur]) continue;
-        vis[cur] = true;
-        
-        cout << cur << ' ';
-        
-        for(auto nxt: adj[cur]){
-            if(vis[nxt]) continue;
-            s.push(nxt);
-            
-        }
-    }*/
+    bfs(V);
     
     cout << endl;
-    for(int i=0; i<= a; i++)
-    {
-        vis[i] = false;
-    }
     
-    // bfs
-    queue<int> q;
-    q.push(c);
-    vis[c] =true;
-    
-    while(!q.empty())
-    {
-        int cur = q.front();
-        q.pop();
-        cout << cur << ' ';
-        
-        for(auto nxt: adj[cur]){
-            if(vis[nxt]) continue;
-            q.push(nxt);
-            vis[nxt] = true;
-        }
-    }
-    
-    cout << endl;
 }

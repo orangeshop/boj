@@ -1,71 +1,108 @@
+//
+//  main.cpp
+//  cpp
+//
+//  Created by 최영호 on 7/8/24.
+//
+
 #include <iostream>
-#include <string>
-#include <cstring>
-#include <vector>
-#include <stack>
-#include <memory.h>
 #include <algorithm>
+#include <stack>
+#include <string>
+#include <sstream>
 #include <queue>
-#include <tuple>
-#include <math.h>
-#include <list>
-#include <set>
-#include <map>
-#include <iterator>
 
 using namespace std;
-#define S second
-#define F first
-#define l long
-#define MAX 0x7ffffff
-int dx[4] = {-1,0,1,0};
-int dy[4] = {0,1,0,-1};
-int ddx[8] = {-1,-2,-2,-1,1,2,2,1};
-int ddy[8] = {-2,-1,1,2,-2,-1,1,2};
-int cdx[8] = {-1,0,1,0,-1,-1,1,1};
-int cdy[8] = {0,1,0,-1,-1,1,1,-1};
 
-//cin.tie(NULL);
-//ios::sync_with_stdio(false);
-//cout.tie(NULL);
 
-int n;
-long long dp[104][11];
-int main()
-{
-    cin >> n;
+/**
+ 1,0 -> 1
+ 1,1 -> 1
+ 1,2 -> 1
+ 1,3 -> 1
+ 1,4 -> 1
+ 1,5 -> 1
+ 1,6 -> 1
+ 1,7 -> 1
+ 1,8 -> 1
+ 1,9 -> 1
+ 
+ 2,0 -> 1
+ 2,1 -> 1
+ 2,2 -> 2
+ 2,3 -> 2
+ 2,4 -> 2
+ 2,5 -> 2
+ 2,6 -> 2
+ 2,7 -> 2
+ 2,8 -> 2
+ 2,9 -> 1
+ 
+ 
+ 
+ 3,0 -> 1
+ 3,1 -> 3
+ 3,2 -> 3
+ 3,3 -> 3
+ 3,4 -> 3
+ 3,5 -> 3
+ 3,6 -> 3
+ 3,7 -> 3
+ 3,8 -> 3
+ 3,9 -> 1
+ 
+ x,1,0
+ x,x,0
+ 
+ 2 9
+ 
+ 101
+ 121
+ 321
+ 
+ 2,0 1
+ 2,2 2
+ xx1 4?
+ 121
+ 101
+ 
+ 432
+ 232
+ 212
+ 
+ */
+
+int N;
+
+int d[105][10];
+// 자릿수, 마지막 수
+
+int ans = 0;
+int main(){
+    ios_base::sync_with_stdio(false); cin.tie(NULL);
+    cin >> N;
     
-    
-    for(int i=0; i<10; i++)
-    {
-        dp[1][i] = 1;
+    for(int i =1; i <= 9; i++){
+        d[1][i] = 1;
     }
-    dp[1][0] =0;
     
-    for(int i= 2; i<=n; i++)
-    {
-        for(int k=0; k<10; k++)
-        {
-            if(k==0)
-            {
-                dp[i][0] = dp[i-1][1]% 1000000000;
-                continue;
+    for(int i =2; i <= N; i++){
+        for(int k =0; k <= 9; k++){
+            if(k == 0){
+                d[i][k] = d[i-1][k+1];
+            }else if(k == 9){
+                d[i][k] = d[i-1][k-1];
+            }else{
+                d[i][k] = d[i-1][k-1] + d[i-1][k+1];
             }
-            else if(k==9)
-            {
-                dp[i][9] = dp[i-1][8]% 1000000000;
-                continue;
-            }
-            dp[i][k] = (dp[i-1][k-1] + dp[i-1][k+1]) % 1000000000;
+            d[i][k] %= 1000000000;
         }
     }
     
-    long long sum=0;
-    for(int k=0; k<10; k++)
-    {
-        sum += dp[n][k];
+    for(int i =0; i <= 9; i++){
+        ans += d[N][i];
+        ans %= 1000000000;
     }
     
-    cout << sum% 1000000000 << endl;
-    
+    cout << ans << endl;
 }

@@ -1,44 +1,51 @@
+//
+//  main.cpp
+//  cpp
+//
+//  Created by 최영호 on 7/8/24.
+//
+
 #include <iostream>
-#include <string>
-#include <vector>
-#include <stack>
 #include <algorithm>
+#include <stack>
+#include <string>
+#include <sstream>
 #include <queue>
-#include <tuple>
+#include <set>
+
 using namespace std;
-
-int dp[301][3];
-int s[301];
-
-int main()
-{
-    int a=0;
-    cin >> a;
+vector<int> V;
+int N;
+int d[305];
+int ans = 0;
+int main(){
+    cin >> N;
     
-    for(int i=1; i<=a; i++)
-    {
-        cin >> s[i];
-        if(a==1)
-        {
-            cout << s[1];
-            return 0;
-        }
-        
+    for(int i =0; i < N; i++){
+        int a = 0;
+        cin >> a;
+        V.push_back(a);
     }
     
-    dp[1][1] = s[1];
-    dp[1][2] = 0;
-    dp[2][1] = s[2];
-    dp[2][2] = s[1] + s[2];
-        
-    for(int i=3; i<=a; i++)
-    {
-        dp[i][1] = max(dp[i-2][1], dp[i-2][2]) + s[i];
-        dp[i][2] = dp[i-1][1] + s[i];
+    
+    /**
+     1 - 10
+     2 - 30
+     */
+    
+    d[0] = V[0];
+    d[1] = V[1] +V[0];
+    d[2] = max(V[0] + V[2], V[1] + V[2]);
+    
+    
+    
+    for(int i = 3; i < N; i++){
+        int tmp1 = d[i-2] + V[i] ;
+        int tmp2 = d[i-3] + V[i-1] + V[i];
+        d[i] = max(tmp1, tmp2);
     }
     
-  
-    cout << max(dp[a][1], dp[a][2]);
+    cout << d[N-1] << endl;
     
     
 }

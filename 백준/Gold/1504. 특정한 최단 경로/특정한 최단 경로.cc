@@ -1,114 +1,92 @@
+//
+//  main.cpp
+//  cpp
+//
+//  Created by 최영호 on 7/8/24.
+//
+
 #include <iostream>
-#include <string>
-#include<cstring>
-#include <vector>
-#include <stack>
-#include <memory.h>
 #include <algorithm>
+#include <stack>
+#include <string>
+#include <sstream>
 #include <queue>
-#include <tuple>
-#include <math.h>
 #include <set>
-#include <map>
+
 using namespace std;
-#define S second
-#define F first
-#define l long
-#define MAX 0x7ffffff
-int dx[4] = {1,0,-1,0};
-int dy[4] = {0,1,0,-1};
-int ddx[8] = {-1,-2,-2,-1,1,2,2,1};
-int ddy[8] = {-2,-1,1,2,-2,-1,1,2};
 
-int N,E;
-
-vector<pair<int,int>> adj[900];
-long d[900];
-vector<int> target;
-const int INF = 0x3f3f3f3f;
-
+int V, E;
 int v1, v2;
-bool v1_check, v2_check;
 
-priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
+vector<pair<int, int>> adj[20005];
+bool vis[20005];
+int d[20005];
 
-void Dijkstra(int st){
-    
+//queue<pair<int, int>> Q;
+
+priority_queue<pair<int,int>,vector<pair<int,int>>, greater<pair<int,int>>> Q;
+
+
+void dfs(int st){
+    Q.push(make_pair(0, st));
     d[st] = 0;
-    pq.push({d[st], st});
     
-    while(!pq.empty()){
-        pair<int,int> cur = pq.top();
-        pq.pop();
-        
+    while (!Q.empty()) {
+        pair<int, int> cur = Q.top();
+        Q.pop();
         if(d[cur.second] != cur.first) continue;
         for(auto nxt : adj[cur.second]){
-            if(d[nxt.second] <= d[cur.second] + nxt.first) continue;
-            
+            if(d[nxt.second] < d[cur.second] + nxt.first) continue;
             d[nxt.second] = d[cur.second] + nxt.first;
-            
-            pq.push({d[nxt.second], nxt.second});
+            Q.push(make_pair(d[nxt.second], nxt.second));
         }
     }
-    
-    
-//    for(int i=1; i<=N; i++){
-//        cout << d[i] << endl;
-//    }
-//    cout << "--------------" << endl;
 }
 
-
 int main(){
-    cin >> N >> E;
-    long temp_answer = 0;
-    long answer = 0;
     
-    for(int i=0; i< E; i++){
-        int v1 = 0;
-        int v2 = 0;
-        int c =0;
+    fill(d, d+ 20005, 1e9);
+    
+    cin >> V >> E;
+    
+    for(int i =0; i < E; i++){
+        int u, v, w =0;
+        cin >> u >> v >> w;
         
-        
-        cin >> v1 >> v2 >> c;
-        
-        adj[v1].push_back(make_pair(c, v2));
-        adj[v2].push_back(make_pair(c, v1));
+        adj[u].push_back(make_pair(w, v));
+        adj[v].push_back(make_pair(w, u));
     }
     
     cin >> v1 >> v2;
     
-    fill(d, d+N+1, INF);
+    int sTOv1, sTov2, vTov, v1ToN, v2ToN = 0;
     
-    Dijkstra(1);
+    dfs(1);
+    sTOv1 = d[v1];
+    sTov2 = d[v2];
+    
+    fill(d, d+ 20005, 1e9);
+    
+    dfs(v1);
+    vTov = d[v2];
+    v1ToN = d[V];
     
     
-    answer += d[v1];
-    temp_answer += d[v2];
-    fill(d, d+N+1, INF);
-    Dijkstra(v2);
-    temp_answer += d[v1];
-    fill(d, d+N+1, INF);
-    Dijkstra(v1);
-    temp_answer += d[N];
-
-    fill(d, d+N+1, INF);
-    Dijkstra(v1);
-    answer += d[v2];
-    fill(d, d+N+1, INF);
-    Dijkstra(v2);
-    answer += d[N];
-
-    answer = min(temp_answer, answer);
+    fill(d, d+ 20005, 1e9);
     
-    if(answer >= INF){
-        answer  = -1;
+    dfs(v2);
+    v2ToN = d[V];
+    
+    int answer = 1e9;
+    
+    answer = min(sTOv1 + vTov + v2ToN, sTov2 + vTov + v1ToN);
+    
+    if(answer >= 1e9 || vTov >= 1e9){
+        cout << "-1" << endl;
+    }else{
+        cout << answer << endl;
     }
     
-    if(d[N] >= INF){
-        answer  = -1;
-    }
     
-    cout << answer << endl;
     
 }

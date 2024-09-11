@@ -1,76 +1,65 @@
+//
+//  main.cpp
+//  cpp
+//
+//  Created by 최영호 on 7/8/24.
+//
+
 #include <iostream>
-#include <string>
-#include <cstring>
-#include <vector>
-#include <stack>
-#include <memory.h>
 #include <algorithm>
+#include <stack>
+#include <string>
+#include <sstream>
 #include <queue>
-#include <tuple>
-#include <math.h>
-#include <list>
 #include <set>
 #include <map>
-#include <iterator>
-
+#include <cstring>
 using namespace std;
-#define S second
-#define F first
-#define l long
-#define MAX 0x7ffffff
-int dx[4] = {-1,0,1,0};
-int dy[4] = {0,1,0,-1};
-int ddx[8] = {-1,-2,-2,-1,1,2,2,1};
-int ddy[8] = {-2,-1,1,2,-2,-1,1,2};
-int cdx[8] = {-1,0,1,0,-1,-1,1,1};
-int cdy[8] = {0,1,0,-1,-1,1,1,-1};
 
-int N,R,Q;
-int U,V;
-int input;
+int N, R, Q;
 
 vector<int> adj[100005];
-
-bool vis[100005];
-int tree_count[100005];
-
-int func(int number){
-    vis[number] = true;
-    for(auto nxt: adj[number]){
-        if(vis[nxt] == true)continue;
-        tree_count[number] += func(nxt);
-    }
+vector<int> V;
+int vis[100005];
+int DFS(int cur){
+    vis[cur] = 1;
     
-    tree_count[number]++;
-    return tree_count[number];
+    for(int nxt : adj[cur]){
+        if(vis[nxt]) continue;
+        vis[cur] += DFS(nxt);
+    }
+    return vis[cur];
 }
 
-
-
-
-
-
-int main()
-{
+int main(){
     cin.tie(NULL);
-    ios::sync_with_stdio(false);
+        ios::sync_with_stdio(false);
     cin >> N >> R >> Q;
     
-    for(int i=0; i<N-1; i++)
-    {
-        cin >> U >> V;
+    for(int i =0; i < N-1; i++){
+        int a = 0;
+        int b = 0;
         
-        adj[U].push_back(V);
-        adj[V].push_back(U);
+        cin >> a >> b;
         
+        adj[a].push_back(b);
+        adj[b].push_back(a);
     }
     
-    func(R);
-
-    for(int i=0; i<Q; i++)
-    {
-        cin >> input;
-        cout << tree_count[input] << '\n';
+    for(int i =0; i < Q; i++){
+        int a = 0;
+        cin >> a;
+        V.push_back(a);
     }
     
+    DFS(R);
+    
+    for(int i =0; i < Q; i++){
+        cout << vis[V[i]]<< '\n';
+    }
 }
+
+
+
+
+

@@ -1,5 +1,3 @@
-
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -23,7 +21,7 @@ public class Main {
 
     private static boolean solution() {
         ArrayList<Integer> ls = new ArrayList<>();
-        
+
         for(int i = L; i <= R; i++){
             ls.add(arr[i]);
         }

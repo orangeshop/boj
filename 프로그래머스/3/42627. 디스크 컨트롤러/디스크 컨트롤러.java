@@ -49,19 +49,19 @@ class Solution {
             if(!check && !pq.isEmpty()){
                 check = true;
                 cnt = pq.poll();
+                
             }
             
             cnt.t--;
             if(cnt.t == 0){
+                System.out.println(i);
                 answer += i - cnt.s; 
                 check = false;
             }
         }
         
-        
-         
        
-        return (answer / jobs.length)+1;
+        return (answer / jobs.length) + 1;
     }
     
     static class Pair{

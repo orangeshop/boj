@@ -32,12 +32,11 @@ public class Main {
     private static String solution(int a) {
 
         int[] cnt = new int[a + 1];
-        boolean[] subVis = new boolean[a + 1];
 
-        Arrays.fill(cnt, 0);
+        Arrays.fill(cnt, -1);
 
         for (int j = 1; j <= a; j++) {
-            if(cnt[j] == 0) {
+            if (cnt[j] == -1) {
                 ArrayDeque<Integer> Q = new ArrayDeque<>();
                 Q.add(j);
                 cnt[j] = 1;
@@ -46,14 +45,18 @@ public class Main {
                     Integer cur = Q.poll();
 
                     for (int nxt : ls[cur]) {
-                        if(cnt[nxt] == 0){
+                        if (cnt[nxt] == -1) {
+
+                            if (cnt[cur] == 0) {
+                                cnt[nxt] = 1;
+                            } else {
+                                cnt[nxt] = 0;
+                            }
+
                             Q.add(nxt);
-                            cnt[nxt] = -1 * cnt[cur];
-                        } else if (cnt[cur] == cnt[nxt]) {
+                        } else if (cnt[nxt] == cnt[cur]) {
                             return "NO";
                         }
-
-
                     }
                 }
             }

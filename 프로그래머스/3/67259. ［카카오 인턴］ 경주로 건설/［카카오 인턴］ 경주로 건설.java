@@ -44,8 +44,7 @@ class Solution {
             Pair cur = Q.removeFirst();
             
             if(cur.x == n-1 && cur.y == n-1){
-                answer = Math.min(answer, cur.total * 100 + cur.corner * 500);
-                
+                answer = Math.min(answer, cur.total * 100 + cur.corner * 500); 
             }
             
             for(int dir =0; dir < 4; dir++){
@@ -54,7 +53,10 @@ class Solution {
                 
                 if(nx < 0 || nx >= n || ny < 0 || ny >= n) continue;
                 
+                // 현재 코너 개수
                 int c = cur.corner;
+                
+                // 이전 방향과 현재 방향이 다르면 코너 증가 
                 if(cur.pre != dir){
                     c++;
                 }

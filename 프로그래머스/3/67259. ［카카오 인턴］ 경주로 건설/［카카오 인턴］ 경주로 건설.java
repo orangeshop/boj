@@ -43,11 +43,7 @@ class Solution {
         while(!Q.isEmpty()){
             Pair cur = Q.removeFirst();
             
-            // System.out.println(cur.x + " " + cur.y + " " + cur.pre + " " + cur.total + " " + cur.corner);
-            
             if(cur.x == n-1 && cur.y == n-1){
-                // System.out.println("end " + cur.total + " " + cur.corner);
-                // answer = ((cur.total)- cur.corner) * 100 + (cur.corner * 500);
                 answer = Math.min(answer, cur.total * 100 + cur.corner * 500);
                 
             }
@@ -60,7 +56,6 @@ class Solution {
                 
                 int c = cur.corner;
                 if(cur.pre != dir){
-                    // System.out.println("*** " + nx + " " + ny);
                     c++;
                 }
                 
@@ -70,7 +65,6 @@ class Solution {
                     Q.add(new Pair(nx,ny, dir, c, cur.total+1));
                     vis[nx][ny] = c;
                 }
-                
             }
         }
         

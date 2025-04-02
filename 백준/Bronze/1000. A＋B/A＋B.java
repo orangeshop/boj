@@ -17,8 +17,8 @@ public class Main {
         int a = Integer.parseInt(st.nextToken());
         int b = Integer.parseInt(st.nextToken());
 
-        BiFunction<Integer, Integer, Integer> add = (x, y) -> x + y;
+//        BiFunction<Integer, Integer, Integer> add = (x, y) -> x + y;
 
-        System.out.println(add.apply(a, b));
+        System.out.println(a+b);
     }
 }

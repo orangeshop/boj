@@ -24,21 +24,7 @@ public class Main {
 
         }
     }
-
-    // 우선순위 큐에 저장될 상태 정보를 담는 클래스
-    // 거리가 짧은 순서대로 정렬되도록 Comparable 인터페이스 구현
-    static class Path {
-        int node;
-        int dist;
-        int cost;
-
-        public Path(int node, int dist, int cost) {
-            this.node = node;
-            this.dist = dist;
-            this.cost = cost;
-        }
-    }
-
+    
     static ArrayList<Edge>[] adj;
 
     public static void main(String[] args) throws IOException {

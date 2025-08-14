@@ -10,13 +10,10 @@ with FISH_INFO_a as(
 )
 
 
-
-# select * from FISH_INFO_a;
-
 select 
 count(a.ID) as FISH_COUNT,
 (
-    max(a.LENGTH) 
+    max(b.LENGTH) 
     
 ) as MAX_LENGTH,
 a.FISH_TYPE

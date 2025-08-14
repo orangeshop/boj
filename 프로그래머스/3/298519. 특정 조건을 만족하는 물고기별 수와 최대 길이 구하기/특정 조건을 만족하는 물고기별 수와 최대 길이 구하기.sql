@@ -16,15 +16,13 @@ with FISH_INFO_a as(
 select 
 count(a.ID) as FISH_COUNT,
 (
-    select 
     max(a.LENGTH) 
-    from FISH_INFO 
-    group by a.FISH_TYPE
+    
 ) as MAX_LENGTH,
 a.FISH_TYPE
 from FISH_INFO a left join FISH_INFO_a b
 on a.ID = b.ID
 group by a.FISH_TYPE
-having avg(b.LENGTH) >= 33
+having avg(b.LENGTH) > 33
 order by a.FISH_TYPE
 ;

@@ -19,28 +19,6 @@ public class Main {
     static int[] dx = {0,1,0,-1};
     static int[] dy = {1,0,-1,0};
     
-    
-    // static List<Person> pls = new ArrayList<>();
-
-
-    /*
-    board에는 일단 시작 점을 표시해야 함
-    거리 값을 같이 가지고 있는게 좋은 듯 함
-
-    map -> 1_2 -> 3_3_거리
-    
-    특정 위치를 뽑기 위해서는 현재의 차 좌표에서 거리가 가장 가까운 곳을 찾아야 함
-    확인하는 함수 만들어야함 (거리 리스트가 1개 이상일 경우)
-    -> 그 후 지도에서 시작점 지우기 
-
-    0,1,2 -> 시작점
-    
-    나머지는 자동차 함수에 연료 계산 함수 넣기
-
-    모든 손님을 태울 수 없으면 -1
-
-    */
-    
     static class Car{
         int x;
         int y;
@@ -88,13 +66,7 @@ public class Main {
                 }
             }
 
-            // for(int i =0; i < result.size(); i++){
-            //     System.out.println(result.get(i).x + " " + result.get(i).y);
-            // }
 
-            // System.out.println();
-
-            // 정렬 로직 들어가야함
 
             result.sort((o1, o2) -> {
                 if(o1.count == o2.count){
@@ -106,11 +78,6 @@ public class Main {
 
                 return o1.count - o2.count;
             });
-
-            // for(int i =0; i < result.size(); i++){
-            //     System.out.println(result.get(i).x + " " + result.get(i).y + " " + result.get(i).count);
-            // }
-
 
             if(result.size() > 0){
                 return result.get(0);

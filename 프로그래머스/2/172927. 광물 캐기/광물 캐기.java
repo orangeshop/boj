@@ -28,6 +28,8 @@ class Solution {
         for(int i =0; i < minerals.length; i++){
             mineralsTmp[i] = minerals[i];
         }
+
+        Arrays.fill(arr, -1);
         
         solve();
         return answer;
@@ -54,50 +56,40 @@ class Solution {
             int result = 0;
             int idx = 0;
             
-//             for(int i =0; i < arr.length; i++){
-//                 System.out.print(arr[i] + " ");
-//             }
-//             System.out.println();
-            
-            
             for(int i =0; i < mineralsSize; i++){
                 if(i > 0 && i % 5 == 0){ 
                     idx++;
                 }
-                if(arr[idx] == 0) break;
+                if(arr[idx] == -1) break;
                 
                 int num = 0;
-                
                 if(mineralsTmp[i].equals("diamond")) num = 0;
                 if(mineralsTmp[i].equals("iron")) num = 1;
                 if(mineralsTmp[i].equals("stone")) num = 2;
                 
-                // System.out.println(arr[idx]-1 + " " + num + " " + mineBoard[arr[idx]-1][num]);
-                
-                result += mineBoard[arr[idx]-1][num];   
+                result += mineBoard[arr[idx]][num];   
             }
-            System.out.println();
             answer = Math.min(result, answer);
             
             return;
         }
         
         if(stone < picksTmp[2]){
-            arr[depth] = 3;
+            arr[depth] = 2;
             dfs(depth + 1, stone + 1, iron, dia);
-            arr[depth] = 0;
+            arr[depth] = -1;
         }
         
         if(iron < picksTmp[1]){
-            arr[depth] = 2;
+            arr[depth] = 1;
             dfs(depth + 1, stone, iron + 1, dia);
-            arr[depth] = 0;
+            arr[depth] = -1;
         }
         
         if(dia < picksTmp[0]){
-            arr[depth] = 1;
-            dfs(depth + 1, stone, iron, dia + 1);
             arr[depth] = 0;
+            dfs(depth + 1, stone, iron, dia + 1);
+            arr[depth] = -1;
         }    
     }
     

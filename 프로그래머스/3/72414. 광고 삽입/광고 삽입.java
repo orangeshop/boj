@@ -6,42 +6,37 @@ class Solution {
     static long[] time; 
 
     public String solution(String play_time, String adv_time, String[] logs) {
-        long ptSum = timeCalc(play_time);
-        time = new long[(int) ptSum + 1];
+        int ptSum = (int) timeCalc(play_time);
+        time = new long[ptSum + 1];
         
 
         for (int i = 0; i < logs.length; i++) {
             String[] stp = logs[i].split("-");
-            long start = timeCalc(stp[0]);
-            long end = timeCalc(stp[1]);
+            int start = (int) timeCalc(stp[0]);
+            int end = (int) timeCalc(stp[1]);
 
-            time[(int)start]++; 
+            time[start]++; 
             
-            if (end < ptSum) {
-                time[(int)end]--;
+            if (end <= ptSum) {
+                time[end]--;
             }
-            
         }
         
         for (int i = 1; i < ptSum; i++) {
             time[i] += time[i - 1];
         }
         
-        long ad = timeCalc(adv_time);
-        
-        long currentSum = 0; 
+        int ad = (int) timeCalc(adv_time);
+        long currentSum = 0;
         
         for (int i = 0; i < ad; i++) {
             currentSum += time[i];
         }
-        
-        
-        
         long maxSum = currentSum;
         long maxIdx = 0;
         
-        for(long i = ad; i < ptSum; i++){
-            currentSum += time[(int) i] - time[(int) (i - ad)];
+        for(int i = ad; i < ptSum; i++){
+            currentSum += time[i] - time[i - ad];
             if(currentSum > maxSum){
                 maxSum = currentSum;
                 maxIdx = (i - ad + 1);

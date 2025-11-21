@@ -1,14 +1,21 @@
 -- 코드를 작성해주세요
-select ITEM_ID,	ITEM_NAME,	RARITY
+with af_table as(
+    select 
+    a.ITEM_NAME
+    from ITEM_INFO a join ITEM_TREE b
+    on a.ITEM_ID = b.PARENT_ITEM_ID
+    group by a.ITEM_NAME
+)
+
+# select * from af_table
+
+select
+ITEM_ID,
+ITEM_NAME,
+RARITY
 from ITEM_INFO
-where ITEM_ID not in(
-    select PARENT_ITEM_ID
-    from ITEM_TREE
-    where PARENT_ITEM_ID is not null
-    group by PARENT_ITEM_ID
+where ITEM_NAME not in (
+    select * from af_table
 )
 order by ITEM_ID desc
-
-# select PARENT_ITEM_ID
-# from ITEM_TREE
-# group by PARENT_ITEM_ID
+;

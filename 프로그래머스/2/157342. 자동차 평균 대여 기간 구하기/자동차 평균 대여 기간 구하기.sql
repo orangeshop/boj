@@ -1,16 +1,7 @@
--- 코드를 입력하세요
-with af_table as(
-    select 
-    car_id,
-    DATEDIFF(END_DATE, START_DATE) + 1 as AVERAGE_DURATION
-    from CAR_RENTAL_COMPANY_RENTAL_HISTORY
-)
-
-SELECT 
-car_id as CAR_ID,
-round(avg(AVERAGE_DURATION),1) as AVERAGE_DURATION
-from af_table
-group by car_id
-having avg(AVERAGE_DURATION) >= 7
-order by AVERAGE_DURATION desc,CAR_ID desc
-;
+SELECT
+    CAR_ID,
+    ROUND(AVG(DATEDIFF(END_DATE, START_DATE) + 1), 1) AS AVERAGE_DURATION
+FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY
+GROUP BY CAR_ID
+HAVING AVERAGE_DURATION >= 7  -- 7일 '이상'이므로 = 포함, 별칭 사용 가능
+ORDER BY AVERAGE_DURATION DESC, CAR_ID DESC;

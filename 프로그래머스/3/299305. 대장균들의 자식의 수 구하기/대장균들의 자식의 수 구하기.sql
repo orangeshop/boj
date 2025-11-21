@@ -1,10 +1,20 @@
 -- 코드를 작성해주세요
-select a.ID, 
-(
-    select count(*)
-    from ECOLI_DATA b
-    where a.ID = b.PARENT_ID
+with af_table as(
+    select 
+    ID,
+    IFNULL(PARENT_ID, 0) as PARENT_ID
+    from ECOLI_DATA
+)
+
+select 
+a.ID,
+(select 
+ count(*) 
+ from af_table 
+ where PARENT_ID = a.ID
 ) as CHILD_COUNT
+
 from ECOLI_DATA a
-group by a.ID
-order by a.ID;
+order by a.ID 
+;
+

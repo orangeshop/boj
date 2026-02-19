@@ -1,17 +1,33 @@
 -- 코드를 입력하세요
+with t1 as(
+    select 
+    a.ONLINE_SALE_ID,
+    a.USER_ID,
+    a.PRODUCT_ID,	
+    a.SALES_AMOUNT,	
+    a.SALES_DATE,
+    b.GENDER,
+    b.AGE,
+    b.JOINED
+    from ONLINE_SALE a join USER_INFO b
+    on a.USER_ID = b.USER_ID
+)
 
 
+SELECT 
+YEAR(SALES_DATE) as YEAR, 
+MONTH(SALES_DATE) as MONTH,
+GENDER,
+count(distinct USER_ID) as USERS
+from t1
+where GENDER is not null
+group by YEAR(SALES_DATE), MONTH(SALES_DATE), GENDER
+order by YEAR(SALES_DATE), MONTH(SALES_DATE), GENDER
 
+# select * from t1
 
-SELECT
-YEAR(b.SALES_DATE) as YEAR
-, MONTH(b.SALES_DATE) as MONTH
-, a.GENDER
-, count(DISTINCT a.USER_ID) as USERS
-from USER_INFO a join ONLINE_SALE b
-on a.USER_ID = b.USER_ID
-where year(b.SALES_DATE) = 2022
-and a.GENDER is not null
-group by MONTH, a.GENDER
-order by YEAR, MONTH, a.GENDER
 ;
+
+
+
+

@@ -1,6 +1,7 @@
 -- 코드를 입력하세요
-SELECT INGREDIENT_TYPE, sum(f.TOTAL_ORDER) as 'TOTAL_ORDER'
-# select * 
-from FIRST_HALF f right join ICECREAM_INFO i
-on f.FLAVOR = i.FLAVOR
-group by INGREDIENT_TYPE
+SELECT 
+b.INGREDIENT_TYPE,
+sum(a.TOTAL_ORDER) as TOTAL_ORDER
+from FIRST_HALF a join ICECREAM_INFO b
+on a.FLAVOR = b.FLAVOR
+group by b.INGREDIENT_TYPE

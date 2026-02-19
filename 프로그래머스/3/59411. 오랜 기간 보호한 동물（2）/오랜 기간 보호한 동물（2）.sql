@@ -1,7 +1,9 @@
 -- 코드를 입력하세요
-SELECT a.ANIMAL_ID, a.name
-
-from ANIMAL_INS a inner join ANIMAL_OUTS b
+SELECT
+a.ANIMAL_ID,
+a.NAME
+from ANIMAL_OUTS a join ANIMAL_INS b
 on a.ANIMAL_ID = b.ANIMAL_ID
-order by a.DATETIME - b.DATETIME
+order by (b.DATETIME - a.DATETIME)
 limit 2
+;

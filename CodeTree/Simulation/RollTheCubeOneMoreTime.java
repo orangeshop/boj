@@ -1,176 +1,138 @@
-package codetree;
+package CodeTree_new;
 
-import java.io.*;
-import java.util.*;
-
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayDeque;
+import java.util.StringTokenizer;
 
 public class RollTheCubeOneMoreTime {
-
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static StringTokenizer st;
+
+    static int N, M;
+    static int answer = 0;
+    static int[][] board;
 
     /*
      * 00 01 02
      * 10 11 12
      * 20 21 22
      * */
-
-    // 상우하좌
     static int[][] P = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
 
-    static class Dice {
-        int top;
-        int bottom;
-        int up;
-        int right;
-        int down;
-        int left;
 
-        int dir = 1;
+    static class Dice {
         int x = 0;
         int y = 0;
 
-        public Dice(int top, int bottom, int up, int right, int down, int left) {
-            this.top = top;
-            this.bottom = bottom;
-            this.up = up;
-            this.right = right;
-            this.down = down;
-            this.left = left;
+        int dir = 1;
+
+        int top = 1;
+        int bottom = 6;
+        int left = 4;
+        int right = 3;
+        int up = 5;
+        int down = 2;
+
+
+        void setDir() {
+            if (bottom > board[x][y]) {
+                dir++;
+                if (dir >= 4) dir = 0;
+            } else if (bottom < board[x][y]) {
+                dir--;
+                if (dir < 0) dir = 3;
+            }
         }
 
-        void shake(int type) {
-            if (type == 0) {
-                // 위로 굴림
+        void move() {
 
+
+            int nx = x + P[dir][0];
+            int ny = y + P[dir][1];
+
+            // 벽에 부딧히면 반사 후 한칸 이동
+
+            if (nx < 0 || nx >= N || ny < 0 || ny >= N) {
+                if (dir == 0) dir = 2;
+                else if (dir == 1) dir = 3;
+                else if (dir == 2) dir = 0;
+                else if (dir == 3) dir = 1;
+            }
+
+            x += P[dir][0];
+            y += P[dir][1];
+
+
+            // up
+            if (dir == 0) {
                 /*
-                 * top -> up
-                 * up -> bottom
-                 * bottom -> down
-                 * down -> top
-                 *
+                 * top => up
+                 * up => bottom
+                 * bottom => down
+                 * down => top
+                 * */
+                int tmp = top;
+
+                top = down;
+                down = bottom;
+                bottom = up;
+                up = tmp;
+            }
+
+
+            // right
+            if (dir == 1) {
+                /*
+                 * top => right
+                 * right => bottom
+                 * bottom => left
+                 * left => top
                  * */
 
-                ArrayDeque<Integer> q = new ArrayDeque<>();
+                int tmp = top;
 
-                q.add(down);
-                q.add(bottom);
-                q.add(up);
-                q.add(top);
+                top = left;
+                left = bottom;
+                bottom = right;
+                right = tmp;
+            }
 
-                this.top = q.removeFirst();
-                this.down = q.removeFirst();
-                this.bottom = q.removeFirst();
-                this.up = q.removeFirst();
-
-            } else if (type == 2) {
-                // 아래로 굴림
-                ArrayDeque<Integer> q = new ArrayDeque<>();
+            // down
+            if (dir == 2) {
                 /*
-                 * top -> down
-                 * down -> bottom
+                 * top => down
+                 * down => bottom
                  * bottom -> up
                  * up -> top
-                 *
                  * */
 
-                q.add(top);
-                q.add(down);
-                q.add(bottom);
-                q.add(up);
+                int tmp = top;
 
-                this.down = q.removeFirst();
-                this.bottom = q.removeFirst();
-                this.up = q.removeFirst();
-                this.top = q.removeFirst();
+                top = up;
+                up = bottom;
+                bottom = down;
+                down = tmp;
 
+            }
 
-            } else if (type == 3) {
-                // 왼쪽으로 굴림
-                ArrayDeque<Integer> q = new ArrayDeque<>();
-
+            // left
+            if (dir == 3) {
                 /*
-                 * top -> left
+                 * top => left
                  * left -> bottom
                  * bottom -> right
                  * right -> top
+                 *
                  * */
 
-                q.add(top);
-                q.add(left);
-                q.add(bottom);
-                q.add(right);
+                int tmp = top;
 
-                this.left = q.removeFirst();
-                this.bottom = q.removeFirst();
-                this.right = q.removeFirst();
-                this.top = q.removeFirst();
-
-            } else {
-                // 오른쪽으로 굴림
-                ArrayDeque<Integer> q = new ArrayDeque<>();
-
-                /*
-                 * top -> right
-                 * right -> bottom
-                 * bottom -> left
-                 * left -> top
-                 * */
-
-                q.add(top);
-                q.add(right);
-                q.add(bottom);
-                q.add(left);
-
-                this.right = q.removeFirst();
-                this.bottom = q.removeFirst();
-                this.left = q.removeFirst();
-                this.top = q.removeFirst();
-            }
-        }
-
-        public void move(int type) {
-
-            this.x += P[type][0];
-            this.y += P[type][1];
-
-
-            if (this.x < 0 || this.x >= N || this.y < 0 || this.y >= N) {
-                // 방향 반대로
-                // 한칸 이동
-
-                if (type == 0) {
-                    this.dir = 2;
-                } else if (type == 1) {
-                    this.dir = 3;
-                } else if (type == 2) {
-                    this.dir = 0;
-                } else if (type == 3) {
-                    this.dir = 1;
-                }
-
-                this.x += P[this.dir][0] * 2;
-                this.y += P[this.dir][1] * 2;
-
-            }
-
-            shake(this.dir);
-        }
-
-        void settingDir() {
-            if (board[this.x][this.y] < this.bottom) {
-                this.dir += 1;
-                if (this.dir > 3) {
-                    this.dir = 0;
-                }
-            } else if (board[this.x][this.y] == this.bottom) {
-                // 그대로
-            } else if (board[this.x][this.y] > this.bottom) {
-                this.dir -= 1;
-
-                if (this.dir < 0) {
-                    this.dir = 3;
-                }
+                top = right;
+                right = bottom;
+                bottom = left;
+                left = tmp;
             }
         }
     }
@@ -185,12 +147,68 @@ public class RollTheCubeOneMoreTime {
         }
     }
 
-    static Dice d = new Dice(1, 6, 5, 3, 2, 4);
-    static int N, M;
-    static int[][] board;
-    static int answer = 0;
+    static void calcPoint(int x, int y) {
+        ArrayDeque<Pair> q = new ArrayDeque<>();
+        boolean[][] vis = new boolean[N][N];
+//        System.out.println(x + " " + y);
+        int ans = board[x][y];
+
+        q.add(new Pair(x, y));
+        vis[x][y] = true;
+
+        while (!q.isEmpty()) {
+            Pair cur = q.removeFirst();
+
+            for (int[] nxt : P) {
+                int nx = nxt[0] + cur.x;
+                int ny = nxt[1] + cur.y;
+
+                if (nx < 0 || nx >= N || ny < 0 || ny >= N) continue;
+                if (board[x][y] != board[nx][ny]) continue;
+                if (vis[nx][ny]) continue;
+
+                q.add(new Pair(nx, ny));
+                vis[nx][ny] = true;
+
+                ans += board[nx][ny];
+            }
+        }
+
+
+//        System.out.println("ans " + ans);
+        answer += ans;
+    }
+
+    static Dice dice = new Dice();
 
     public static void main(String[] args) throws IOException {
+        input();
+
+        // 항상 처음에는 오른쪽으로 움직임
+        dice.move();
+
+        calcPoint(dice.x, dice.y);
+
+        dice.setDir();
+
+        // 방향 조정 함수
+
+        for(int i =0; i < M-1; i++){
+            dice.move();
+
+            calcPoint(dice.x, dice.y);
+
+            dice.setDir();
+
+//            System.out.println(dice.x + " " + dice.y + " " + dice.dir);
+        }
+
+//        System.out.println(dice.x + " " + dice.y + " " + dice.dir);
+
+        System.out.println(answer);
+    }
+
+    private static void input() throws IOException {
         st = new StringTokenizer(br.readLine());
 
         N = Integer.parseInt(st.nextToken());
@@ -204,69 +222,5 @@ public class RollTheCubeOneMoreTime {
                 board[i][k] = Integer.parseInt(st.nextToken());
             }
         }
-
-        init();
-
-
-        for (int i = 0; i < M; i++) {
-            System.out.println("st : " + d.x + " " + d.y + " dir : " + d.dir + " bottom : " + d.bottom);
-            d.move(d.dir);
-            calcPoint(board[d.x][d.y]);
-            d.settingDir();
-            System.out.println("end : " + d.x + " " + d.y + " dir : " + d.dir + " bottom : " + d.bottom);
-        }
-
-        System.out.println(answer);
-
-    }
-
-    private static void init() {
-        d.move(0);
-        System.out.println("top : " + d.top + " up : " + d.up + " right : " + d.right + " down : " + d.down + " left : " + d.left + " bottom : " + d.bottom);
-
-        d = new Dice(1, 6, 5, 3, 2, 4);
-        d.move(1);
-        System.out.println("top : " + d.top + " up : " + d.up + " right : " + d.right + " down : " + d.down + " left : " + d.left + " bottom : " + d.bottom);
-
-        d = new Dice(1, 6, 5, 3, 2, 4);
-        d.move(2);
-        System.out.println("top : " + d.top + " up : " + d.up + " right : " + d.right + " down : " + d.down + " left : " + d.left + " bottom : " + d.bottom);
-
-        d = new Dice(1, 6, 5, 3, 2, 4);
-        d.move(3);
-        System.out.println("top : " + d.top + " up : " + d.up + " right : " + d.right + " down : " + d.down + " left : " + d.left + " bottom : " + d.bottom);
-
-        d = new Dice(1, 6, 5, 3, 2, 4);
-
-    }
-
-    static void calcPoint(int nowP) {
-        ArrayDeque<Pair> q = new ArrayDeque<>();
-        boolean[][] vis = new boolean[N][N];
-        q.add(new Pair(d.x, d.y));
-        vis[d.x][d.y] = true;
-
-        int cnt = 1;
-
-
-        while (!q.isEmpty()) {
-            Pair cur = q.removeFirst();
-
-            for (int[] nxt : P) {
-                int nx = nxt[0] + cur.x;
-                int ny = nxt[1] + cur.y;
-
-                if (nx < 0 || nx >= N || ny < 0 || ny >= N) continue;
-                if (vis[nx][ny] || board[nx][ny] != nowP) continue;
-
-                cnt++;
-                q.add(new Pair(nx, ny));
-                vis[nx][ny] = true;
-            }
-        }
-
-//        System.out.println(cnt);
-//        System.out.println(cnt * nowP);
-        answer += (cnt * nowP);
     }
 }
